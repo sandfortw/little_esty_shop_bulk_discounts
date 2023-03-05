@@ -1,8 +1,12 @@
-# frozen_string_literal: true
+require 'httparty'
+require './lib/holiday_api/holiday'
+require './lib/holiday_api/holiday_search'
+require './lib/holiday_api/holiday_service'
 
 class BulkDiscountsController < ApplicationController
   def index
     @merchant = Merchant.find(params[:merchant_id])
+    @holidays = HolidaySearch.new.holidays.first(3)
   end
 
   def show
