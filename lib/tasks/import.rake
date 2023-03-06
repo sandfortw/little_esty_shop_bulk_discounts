@@ -3,6 +3,7 @@
 require 'csv'
 
 task :import, [:customers] => :environment do
+  Customer.destroy_all
   CSV.foreach('db/data/customers.csv', headers: true) do |row|
     Customer.create!(row.to_hash)
   end
@@ -11,6 +12,7 @@ task :import, [:customers] => :environment do
 end
 
 task :import, [:merchants] => :environment do
+  Merchant.destroy_all
   CSV.foreach('db/data/merchants.csv', headers: true) do |row|
     Merchant.create!(row.to_hash)
   end
@@ -19,6 +21,7 @@ task :import, [:merchants] => :environment do
 end
 
 task :import, [:items] => :environment do
+  Item.destroy_all
   CSV.foreach('db/data/items.csv', headers: true) do |row|
     Item.create!(row.to_hash)
   end
@@ -27,6 +30,7 @@ task :import, [:items] => :environment do
 end
 
 task :import, [:invoices] => :environment do
+  Invoice.destroy_all
   CSV.foreach('db/data/invoices.csv', headers: true) do |row|
     case row.to_hash['status']
     when 'cancelled'
@@ -47,6 +51,7 @@ task :import, [:invoices] => :environment do
 end
 
 task :import, [:transactions] => :environment do
+  Transaction.destroy_all
   CSV.foreach('db/data/transactions.csv', headers: true) do |row|
     case row.to_hash['result']
     when 'failed'
@@ -67,6 +72,7 @@ task :import, [:transactions] => :environment do
 end
 
 task :import, [:invoice_items] => :environment do
+  InvoiceItem.destroy_all
   CSV.foreach('db/data/invoice_items.csv', headers: true) do |row|
     case row.to_hash['status']
     when 'pending'
