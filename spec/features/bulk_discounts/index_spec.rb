@@ -58,12 +58,12 @@ describe 'bulk discounts index' do
   end
 
   it 'has the name and date of the next 3 holidays' do
-    #TO DO: Change the date we are visiting
-    expect(page).to have_content("2023-04-07")
-    expect(page).to have_content("Good Friday")
-    expect(page).to have_content("2023-04-07")
-    expect(page).to have_content("Good Friday")
-    expect(page).to have_content("2023-04-07")
-    expect(page).to have_content("Good Friday")
+    # TO DO: Change the date we are visiting
+    expect(page).to have_content('2023-04-07')
+    expect(page).to have_content('Good Friday')
+    expect(page).to have_content('2023-04-07')
+    expect(page).to have_content('Good Friday')
+    expect(page).to have_content('2023-04-07')
+    expect(page).to have_content('Good Friday')
   end
 end

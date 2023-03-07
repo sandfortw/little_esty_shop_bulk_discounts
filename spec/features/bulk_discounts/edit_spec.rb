@@ -1,15 +1,14 @@
 require 'rails_helper'
 
 describe 'bulk discounts edit page' do
-
   before do
     @merchant = create(:merchant)
-    @bulk_discount= create(:bulk_discount, merchant_id: @merchant.id)
+    @bulk_discount = create(:bulk_discount, merchant_id: @merchant.id)
     visit edit_merchant_bulk_discount_path(@merchant, @bulk_discount)
   end
 
   it 'should have a header' do
-    expect(page).to have_content("Edit Bulk Discount #{@bulk_discount.id}")  
+    expect(page).to have_content("Edit Bulk Discount #{@bulk_discount.id}")
   end
 
   it 'should start with prefilled form fields' do
@@ -34,5 +33,4 @@ describe 'bulk discounts edit page' do
     expect(current_path).to eq(edit_merchant_bulk_discount_path(@merchant, @bulk_discount))
     expect(page).to have_content('Invalid input.')
   end
-
 end

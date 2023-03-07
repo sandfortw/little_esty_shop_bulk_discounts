@@ -19,12 +19,12 @@ class InvoiceItem < ApplicationRecord
 
   def applied_discount
     InvoiceItem
-              .joins(:item)
-              .joins('INNER JOIN bulk_discounts ON items.merchant_id = bulk_discounts.merchant_id AND invoice_items.quantity >= bulk_discounts.quantity_threshold')
-              .where('invoice_items.id = ?', id)
-              .select('invoice_items.*, bulk_discounts.*')
-              .order('bulk_discounts.percent_discounted DESC')
-              .pluck('bulk_discounts.id')
-              .first
+      .joins(:item)
+      .joins('INNER JOIN bulk_discounts ON items.merchant_id = bulk_discounts.merchant_id AND invoice_items.quantity >= bulk_discounts.quantity_threshold')
+      .where('invoice_items.id = ?', id)
+      .select('invoice_items.*, bulk_discounts.*')
+      .order('bulk_discounts.percent_discounted DESC')
+      .pluck('bulk_discounts.id')
+      .first
   end
 end
