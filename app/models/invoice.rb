@@ -21,7 +21,7 @@ class Invoice < ApplicationRecord
     max_discount_table =  InvoiceItem
                                     .joins(:item)
                                     .joins('LEFT JOIN bulk_discounts ON items.merchant_id = bulk_discounts.merchant_id AND invoice_items.quantity >= bulk_discounts.quantity_threshold')
-                                    .where('invoice_items.invoice_id = ?', id)
+                                    .where(invoice_id: id)
                                     .select('invoice_items.*, MAX(bulk_discounts.percent_discounted) AS max_discount')
                                     .group(:id)
     table_sum(max_discount_table)
@@ -35,7 +35,7 @@ class Invoice < ApplicationRecord
     max_discount_table =  InvoiceItem
                                     .joins("INNER JOIN items ON invoice_items.item_id = items.id AND items.merchant_id = #{merchant.id}")
                                     .joins('LEFT JOIN bulk_discounts ON items.merchant_id = bulk_discounts.merchant_id AND invoice_items.quantity >= bulk_discounts.quantity_threshold')
-                                    .where('invoice_items.invoice_id = ?', id)
+                                    .where(invoice_id: id)
                                     .select('invoice_items.*, MAX(bulk_discounts.percent_discounted) AS max_discount')
                                     .group(:id)
     table_sum(max_discount_table)
