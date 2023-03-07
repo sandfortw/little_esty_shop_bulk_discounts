@@ -38,17 +38,13 @@ class Invoice < ApplicationRecord
                                     .where(invoice_id: id)
                                     .select('invoice_items.*, MAX(bulk_discounts.percent_discounted) AS max_discount')
                                     .group(:id)
+
+                                    
     table_sum(max_discount_table)
   end
 
 private
   def table_sum(max_discount_table)
-    max_discount_table.sum do |invoice_item|
-      if invoice_item.max_discount
-      ((100 - invoice_item.max_discount.to_f) / 100.to_f) * invoice_item.unit_price.to_f * invoice_item.quantity.to_f
-      else
-        invoice_item.unit_price.to_f * invoice_item.quantity.to_f
-      end
-    end
+    InvoiceItem.from(max_discount_table, :max_discount_table).sum("CASE WHEN max_discount_table.max_discount IS NOT NULL THEN (((100 - max_discount_table.max_discount) / 100.0) * max_discount_table.unit_price * max_discount_table.quantity) ELSE max_discount_table.unit_price * max_discount_table.quantity END")
   end
 end
