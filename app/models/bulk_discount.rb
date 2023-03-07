@@ -9,10 +9,8 @@ class BulkDiscount < ApplicationRecord
 
   def obsolete?(merchant)
     return false if merchant.bulk_discounts.empty?
-
-    merchant
-      .bulk_discounts
-      .where('(bulk_discounts.percent_discounted < ?) or (bulk_discounts.quantity_threshold > ?)', percent_discounted, quantity_threshold)
-      .empty?
+    merchant.bulk_discounts
+            .where('bulk_discounts.percent_discounted < ? or bulk_discounts.quantity_threshold > ?', percent_discounted, quantity_threshold)
+            .empty?
   end
 end
