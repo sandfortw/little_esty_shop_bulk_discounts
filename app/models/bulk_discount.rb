@@ -6,7 +6,7 @@ class BulkDiscount < ApplicationRecord
   validates_presence_of :quantity_threshold
   validates :quantity_threshold, numericality: { only_integer: true, greater_than: 0 }
   validates :percent_discounted, numericality: { only_integer: true, greater_than: 0, less_than: 101 }
-  validates_with DiscountValidator, if: :new_record?
+  validates_with DiscountValidator
 
   def obsolete?
     if merchant # This line gets around the shoulda matchers bug
