@@ -3,6 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe BulkDiscount, type: :model do
+  
   describe 'validations' do
     it { should validate_presence_of :percent_discounted }
     it { should validate_presence_of :quantity_threshold }
@@ -26,26 +27,26 @@ RSpec.describe BulkDiscount, type: :model do
     end
     describe 'tells you whether a new bulk discount is made obsolete by a previously existing bulk discount' do
       it 'the discount is less than an existing discount at same threshold' do
-        expect(@bulk_discount2.obsolete?(@merchant)).to be(true)
+        expect(@bulk_discount2.obsolete?).to be(true)
       end
 
       it 'the discount is less than an existing discount at larger threshold' do
-        expect(@bulk_discount3.obsolete?(@merchant)).to be(true)
+        expect(@bulk_discount3.obsolete?).to be(true)
       end
       it 'the discount is less than an existing discount at smaller threshold' do
-        expect(@bulk_discount4.obsolete?(@merchant)).to be(false)
+        expect(@bulk_discount4.obsolete?).to be(false)
       end
       it 'discount is greater than an existing discount regardless of threshold' do
-        expect(@bulk_discount5.obsolete?(@merchant)).to be(false)
-        expect(@bulk_discount6.obsolete?(@merchant)).to be(false)
-        expect(@bulk_discount7.obsolete?(@merchant)).to be(false)
+        expect(@bulk_discount5.obsolete?).to be(false)
+        expect(@bulk_discount6.obsolete?).to be(false)
+        expect(@bulk_discount7.obsolete?).to be(false)
       end
 
       it 'if there are no bulk discounts for a merchant, the discount cannot be obsolete' do
         expect(@merchant.bulk_discounts).to_not be_empty
         @bulk_discount1.destroy
         expect(@merchant.bulk_discounts).to be_empty
-        expect(@bulk_discount2.obsolete?(@merchant)).to be(false)
+        expect(@bulk_discount2.obsolete?).to be(false)
       end
     end
   end
