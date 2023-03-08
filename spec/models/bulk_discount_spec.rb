@@ -28,18 +28,24 @@ RSpec.describe BulkDiscount, type: :model do
     describe 'tells you whether a new bulk discount is made obsolete by a previously existing bulk discount' do
       it 'the discount is less than an existing discount at same threshold' do
         expect(@bulk_discount2.obsolete?).to be(true)
+        expect(@bulk_discount2.valid?).to be(false)
       end
 
       it 'the discount is less than an existing discount at larger threshold' do
         expect(@bulk_discount3.obsolete?).to be(true)
+        expect(@bulk_discount3.valid?).to be(false)
       end
       it 'the discount is less than an existing discount at smaller threshold' do
         expect(@bulk_discount4.obsolete?).to be(false)
+        expect(@bulk_discount4.valid?).to be(true)
       end
       it 'discount is greater than an existing discount regardless of threshold' do
         expect(@bulk_discount5.obsolete?).to be(false)
+        expect(@bulk_discount5.valid?).to be(true)
         expect(@bulk_discount6.obsolete?).to be(false)
+        expect(@bulk_discount6.valid?).to be(true)
         expect(@bulk_discount7.obsolete?).to be(false)
+        expect(@bulk_discount7.valid?).to be(true)
       end
 
       it 'if there are no bulk discounts for a merchant, the discount cannot be obsolete' do
@@ -47,6 +53,7 @@ RSpec.describe BulkDiscount, type: :model do
         @bulk_discount1.destroy
         expect(@merchant.bulk_discounts).to be_empty
         expect(@bulk_discount2.obsolete?).to be(false)
+        expect(@bulk_discount2.valid?).to be(true)
       end
     end
   end
