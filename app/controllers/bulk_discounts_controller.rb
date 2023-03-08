@@ -29,6 +29,7 @@ class BulkDiscountsController < ApplicationController
       redirect_to merchant_bulk_discount_path(params[:merchant_id], discount.id)
     else
       flash[:notice] = 'Invalid input.'
+      flash[:error] = discount.errors.full_messages.join(", ")
       redirect_to edit_merchant_bulk_discount_path(params[:merchant_id], discount.id)
     end
   end
@@ -38,7 +39,7 @@ class BulkDiscountsController < ApplicationController
     if discount.save
       redirect_to merchant_bulk_discounts_path(params[:merchant_id])
     else
-      flash[:notice] = 'Invalid input.'
+      flash[:error] = discount.errors.full_messages.join(", ")
       redirect_to new_merchant_bulk_discount_path(params[:merchant_id])
     end
   end
