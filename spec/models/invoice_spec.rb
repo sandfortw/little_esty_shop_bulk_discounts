@@ -61,6 +61,19 @@ RSpec.describe Invoice, type: :model do
         expect(@invoice_1.merchant_total_revenue_discounted(@merchant1)).to eq(105)
         expect(@invoice_1.merchant_total_revenue_discounted(@merchant2)).to eq(5.5)
       end
+
+      it 'excludes discounts that are not the highest available for a merchant' do
+        BulkDiscount.create!(percent_discounted: 40, quantity_threshold: 9, merchant_id: @merchant1.id)
+        BulkDiscount.create!(percent_discounted: 40, quantity_threshold: 5, merchant_id: @merchant2.id)
+        BulkDiscount.create!(percent_discounted: 50, quantity_threshold: 9, merchant_id: @merchant1.id)
+        BulkDiscount.create!(percent_discounted: 50, quantity_threshold: 5, merchant_id: @merchant2.id)
+        invoice_item3 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_2_1.id, quantity: 9, unit_price: 1, status: 2)
+        invoice_item4 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_2_2.id, quantity: 1, unit_price: 1, status: 1)
+        invoice_item5 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_2.id, quantity: 10, unit_price: 10, status: 1)
+
+        expect(@invoice_1.merchant_total_revenue_discounted(@merchant1)).to eq(105)
+        expect(@invoice_1.merchant_total_revenue_discounted(@merchant2)).to eq(5.5)
+      end
     end
 
     describe '#discount_total_revenue' do
@@ -74,7 +87,6 @@ RSpec.describe Invoice, type: :model do
           BulkDiscount.create!(percent_discounted: 50, quantity_threshold: 10, merchant_id: @merchant1.id)
           expect(@invoice_1.discount_total_revenue).to eq(100)
           expect(@invoice_1.discount_total_revenue).to eq(100)
-
         end
 
         it 'only gives the highest bulk discount available' do
@@ -90,7 +102,7 @@ RSpec.describe Invoice, type: :model do
           expect(@invoice_1.discount_total_revenue).to eq(63)
         end
 
-        it 'another merchants with no discounts items are not being affected by discounts' do
+        it 'another merchant with no discounts items are not being affected by discounts' do
           merchant2 = create(:merchant)
           item_3 = Item.create!(name: 'Shampoo', description: 'This washes your hair', unit_price: 10, merchant_id: merchant2.id, status: 1)
           invoice_item3 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: item_3.id, quantity: 1, unit_price: 10, status: 1)
