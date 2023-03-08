@@ -5,8 +5,8 @@ require 'rails_helper'
 describe 'bulk discounts show page' do
   before do
     @merchant = create(:merchant)
-    @bulk_discount1 = create(:bulk_discount, merchant_id: @merchant.id)
-    @bulk_discount2 = create(:bulk_discount, merchant_id: @merchant.id)
+    @bulk_discount1 = create(:bulk_discount, merchant_id: @merchant.id, percent_discounted: 10, quantity_threshold: 10)
+    @bulk_discount2 = create(:bulk_discount, merchant_id: @merchant.id, percent_discounted: 20, quantity_threshold: 20)
     visit merchant_bulk_discount_path(@merchant, @bulk_discount1)
   end
   it 'shows the quantity threshold and percentage discount for a bulk_discount (1)' do
