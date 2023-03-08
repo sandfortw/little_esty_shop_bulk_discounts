@@ -25,7 +25,7 @@ class BulkDiscountsController < ApplicationController
 
   def update
     discount = BulkDiscount.find(params[:id])
-    if discount.update(bulk_discount_params)
+    if discount.update(bulk_discount_params) && !discount.obsolete?
       redirect_to merchant_bulk_discount_path(params[:merchant_id], discount.id)
     else
       flash[:notice] = 'Invalid input.'
