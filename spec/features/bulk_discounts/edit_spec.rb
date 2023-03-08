@@ -4,6 +4,7 @@ describe 'bulk discounts edit page' do
   before do
     @merchant = create(:merchant)
     @bulk_discount = create(:bulk_discount, merchant_id: @merchant.id, percent_discounted: 40, quantity_threshold: 10)
+    @bulk_discount2 = create(:bulk_discount, merchant_id: @merchant.id, percent_discounted: 20, quantity_threshold: 5)
     visit edit_merchant_bulk_discount_path(@merchant, @bulk_discount)
   end
 
@@ -35,4 +36,14 @@ describe 'bulk discounts edit page' do
     expect(current_path).to eq(edit_merchant_bulk_discount_path(@merchant, @bulk_discount))
     expect(page).to have_content('Invalid input.')
   end
+
+  it 'should not update if the discount is superseded by an existing discount, and is able to update self with worse discount' do
+    fill_in('Percent discounted', with: 19)
+    fill_in('Quantity threshold', with: 10)
+    click_on('Submit')
+    expect(current_path).to eq(edit_merchant_bulk_discount_path(@merchant, @bulk_discount))
+    expect(page).to have_content('Invalid input.')
+    expect(page).to have_content('You may not enter a discount that is superseded by an existing discount.')
+  end
+
 end
