@@ -3,7 +3,7 @@ require 'rails_helper'
 describe 'bulk discounts edit page' do
   before do
     @merchant = create(:merchant)
-    @bulk_discount = create(:bulk_discount, merchant_id: @merchant.id)
+    @bulk_discount = create(:bulk_discount, merchant_id: @merchant.id, percent_discounted: 40, quantity_threshold: 10)
     visit edit_merchant_bulk_discount_path(@merchant, @bulk_discount)
   end
 
@@ -24,6 +24,8 @@ describe 'bulk discounts edit page' do
     fill_in('Quantity threshold', with: 10)
     click_on('Submit')
     expect(current_path).to eq(merchant_bulk_discount_path(@merchant, @bulk_discount))
+    expect(page).to have_content('Percentage Discount: 30')
+    expect(page).to have_content('Threshold: 10')
   end
 
   it 'when I fil the form with invalid information, I get a flash message' do
