@@ -57,13 +57,15 @@ describe 'bulk discounts index' do
     expect(page).to_not have_content("#{@bulk_discount1.percent_discounted}% off after #{@bulk_discount1.quantity_threshold} items purchased.")
   end
 
+  
   it 'has the name and date of the next 3 holidays' do
-    # TO DO: Change the date we are visiting
-    expect(page).to have_content('2023-04-07')
-    expect(page).to have_content('Good Friday')
-    expect(page).to have_content('2023-05-29')
-    expect(page).to have_content('Memorial Day')
-    expect(page).to have_content('2023-06-19')
-    expect(page).to have_content('Juneteenth')
+    holidays = HolidaySearch.new.holidays.first(3)
+
+    expect(page).to have_content(holidays.first.date)
+    expect(page).to have_content(holidays.first.name)
+    expect(page).to have_content(holidays.second.date)
+    expect(page).to have_content(holidays.second.name)
+    expect(page).to have_content(holidays.third.date)
+    expect(page).to have_content(holidays.third.name)
   end
 end
